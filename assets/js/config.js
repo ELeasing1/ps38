@@ -1,7 +1,7 @@
 // Настройки сайта. Меняются без пересборки.
 window.TD_CONFIG = {
   // Куда отправлять заказы (POST JSON). На хостинге с PHP работает /api/order.php — он пишет на почту магазина.
-  orderEndpoint: '/api/order.php',
+  orderEndpoint: 'api/order.php',
   // Резерв, если отправка не удалась: покупателю предложим позвонить или отправить заказ письмом
   email: 'sales@petstore.ru',
   phone: '+7 (3952) 50-40-38',

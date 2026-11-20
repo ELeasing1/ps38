@@ -22,7 +22,7 @@ const ICON = {
 let DATA = null;
 function loadData() {
   if (!DATA) {
-    DATA = fetch('/data/products.json', { cache: 'force-cache' }).then((r) => r.json()).then((d) => {
+    DATA = fetch('data/products.json?v=mwoqu0m2', { cache: 'force-cache' }).then((r) => r.json()).then((d) => {
       d.byId = new Map(d.items.map((i) => [i.id, i]));
       return d;
     });
@@ -45,7 +45,7 @@ const Fav = {
   ids: new Set(store.get('sp-fav', [])),
   save() { store.set('sp-fav', [...this.ids]); this.paint(); },
   toggle(id) {
-    if (this.ids.has(id)) { this.ids.delete(id); } else { this.ids.add(id); toast({ title: 'Добавили в избранное', action: { label: 'Открыть', href: '/personal/favorite/' } }); }
+    if (this.ids.has(id)) { this.ids.delete(id); } else { this.ids.add(id); toast({ title: 'Добавили в избранное', action: { label: 'Открыть', href: 'personal/favorite/' } }); }
     this.save();
   },
   paint() {
@@ -119,7 +119,7 @@ function renderDrawer() {
   const n = Cart.count();
   $('[data-cart-n]').textContent = n ? `· ${n}` : '';
   if (!Cart.items.length) {
-    body.innerHTML = `<div class="empty" style="background:transparent"><div class="h3">Пока пусто</div><p class="muted">Добавьте корм, лакомства или игрушку — и мы привезём завтра.</p><a class="btn btn--ink" href="/c/">В каталог</a></div>`;
+    body.innerHTML = `<div class="empty" style="background:transparent"><div class="h3">Пока пусто</div><p class="muted">Добавьте корм, лакомства или игрушку — и мы привезём завтра.</p><a class="btn btn--ink" href="c/">В каталог</a></div>`;
     foot.innerHTML = '';
     return;
   }
@@ -128,7 +128,7 @@ function renderDrawer() {
   foot.innerHTML = `${shipInfo(total)}
     <div class="total-row"><span>Итого</span><b>${money(total)}</b></div>
     ${Cart.clubTotal() < total ? `<div class="total-row" style="color:var(--brand-ink)"><span>По клубной карте</span><b style="font-size:20px">${money(Cart.clubTotal())}</b></div>` : ''}
-    <a class="btn btn--ink btn--lg btn--block" href="/cart/">Оформить заказ ${ICON.arrow}</a>`;
+    <a class="btn btn--ink btn--lg btn--block" href="cart/">Оформить заказ ${ICON.arrow}</a>`;
 }
 
 /* ================= оверлеи ================= */
@@ -232,7 +232,7 @@ function initSearch() {
       ${cats.length ? `<div class="eyebrow search__group-title">Разделы</div><div class="search__hints">${cats.map(([k, n]) => `<a class="chip" href="${d.urls[k]}">${esc(n)}</a>`).join('')}</div>` : ''}
       <div class="eyebrow search__group-title">Товары · ${fmt(total)}</div>
       <div class="search__results">${res.map((p) => `<a class="sres" href="${productUrl(p)}"><span class="sres__img"><img src="${productImg(p)}" alt="" loading="lazy"></span><span><span class="sres__name">${hl(p.n, q)}</span><span class="sres__meta">${p.b >= 0 ? esc(d.brands[p.b]) + ' · ' : ''}${esc(d.names[d.cats[p.c]] || '')}</span></span><span class="sres__price">${p.v.length > 1 ? 'от ' : ''}${money(p.p)}</span></a>`).join('')}</div>
-      <a class="btn btn--ink mt-m" href="/search/?q=${encodeURIComponent(q)}">Все результаты · ${fmt(total)} ${ICON.arrow}</a>`;
+      <a class="btn btn--ink mt-m" href="search/?q=${encodeURIComponent(q)}">Все результаты · ${fmt(total)} ${ICON.arrow}</a>`;
   };
   input.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(run, 120); });
   input.addEventListener('keydown', (e) => {
@@ -245,7 +245,7 @@ function initSearch() {
     if (e.key === 'Enter') {
       e.preventDefault();
       if (active >= 0 && links[active]) location.href = links[active].href;
-      else if (input.value.trim()) location.href = `/search/?q=${encodeURIComponent(input.value.trim())}`;
+      else if (input.value.trim()) location.href = `search/?q=${encodeURIComponent(input.value.trim())}`;
     }
   });
   window.__closeSearch = close;
@@ -883,7 +883,7 @@ function renderBasket() {
   if (root.dataset.done) return;
   const items = Cart.items;
   if (!items.length) {
-    root.innerHTML = `<div class="empty"><div class="h2">В корзине пусто</div><p class="lead">Самое время порадовать питомца.</p><div class="row" style="justify-content:center"><a class="btn btn--ink btn--lg" href="/c/">Перейти в каталог</a><a class="btn btn--ghost btn--lg" href="/personal/favorite/">Избранное</a></div></div>`;
+    root.innerHTML = `<div class="empty"><div class="h2">В корзине пусто</div><p class="lead">Самое время порадовать питомца.</p><div class="row" style="justify-content:center"><a class="btn btn--ink btn--lg" href="c/">Перейти в каталог</a><a class="btn btn--ghost btn--lg" href="personal/favorite/">Избранное</a></div></div>`;
     return;
   }
   const keepForm = $('[data-checkout]', root);
@@ -922,7 +922,7 @@ function renderBasket() {
         </div>
         <div class="field"><label for="c-comment">Комментарий</label><textarea id="c-comment" name="comment" placeholder="Домофон, этаж, удобное время доставки" maxlength="1000"></textarea></div>
         <input type="text" name="website" tabindex="-1" autocomplete="off" class="sr-only" aria-hidden="true">
-        <label class="consent"><input type="checkbox" name="agree" value="1" checked required> <span>Принимаю условия <a href="/term/" target="_blank">пользовательского соглашения</a> и даю согласие на обработку персональных данных по <a href="/privacy/" target="_blank">политике конфиденциальности</a></span></label>
+        <label class="consent"><input type="checkbox" name="agree" value="1" checked required> <span>Принимаю условия <a href="term/" target="_blank">пользовательского соглашения</a> и даю согласие на обработку персональных данных по <a href="privacy/" target="_blank">политике конфиденциальности</a></span></label>
         <div data-order-msg></div>
       </form>
     </div>
@@ -989,7 +989,7 @@ function renderBasket() {
       root.dataset.done = '1';
       Cart.clear();
       store.set('sp-checkout', { name: payload.name, phone: payload.phone, delivery: form.delivery.value, address: payload.address, payment: payload.payment, club: club ? '1' : '' });
-      root.innerHTML = `<div class="empty" style="padding:clamp(40px,6vw,80px) 24px"><div class="vcard__ico" style="width:72px;height:72px;border-radius:50%">${ICON.check}</div><div class="h2">Заказ №${esc(res.id)} принят</div><p class="lead" style="max-width:560px">Спасибо! Оператор позвонит по номеру ${esc(payload.phone)}, чтобы подтвердить заказ. Доставим на следующий день.</p><div class="row" style="justify-content:center"><a class="btn btn--ink btn--lg" href="/c/">Продолжить покупки</a><a class="btn btn--ghost btn--lg" href="/">На главную</a></div></div>`;
+      root.innerHTML = `<div class="empty" style="padding:clamp(40px,6vw,80px) 24px"><div class="vcard__ico" style="width:72px;height:72px;border-radius:50%">${ICON.check}</div><div class="h2">Заказ №${esc(res.id)} принят</div><p class="lead" style="max-width:560px">Спасибо! Оператор позвонит по номеру ${esc(payload.phone)}, чтобы подтвердить заказ. Доставим на следующий день.</p><div class="row" style="justify-content:center"><a class="btn btn--ink btn--lg" href="c/">Продолжить покупки</a><a class="btn btn--ghost btn--lg" href="/">На главную</a></div></div>`;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       $('[data-order-msg]', root).innerHTML = fallbackHTML(payload);
@@ -1002,7 +1002,7 @@ function renderBasket() {
 async function renderFavorites() {
   const root = $('[data-favorites]'); if (!root) return;
   const ids = [...Fav.ids];
-  if (!ids.length) { root.innerHTML = `<div class="empty"><div class="h3">Здесь пока пусто</div><p class="muted">Нажимайте ♡ на карточках — и любимые товары будут под рукой.</p><a class="btn btn--ink" href="/c/">В каталог</a></div>`; return; }
+  if (!ids.length) { root.innerHTML = `<div class="empty"><div class="h3">Здесь пока пусто</div><p class="muted">Нажимайте ♡ на карточках — и любимые товары будут под рукой.</p><a class="btn btn--ink" href="c/">В каталог</a></div>`; return; }
   const d = await loadData();
   const list = ids.map((id) => d.byId.get(id)).filter(Boolean);
   root.innerHTML = `<div class="grid-products">${list.map((p) => cardHTML(p, d)).join('')}</div>`;
